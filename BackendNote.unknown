@@ -1,17 +1,12 @@
-4Lsd2i4SrSYyGkfB
-mongodb+srv://adekanmisamuel4:4Lsd2i4SrSYyGkfB@cluster0.pyry4wp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-
-
-o6sFdmMlFI6Znl1O
-mongodb+srv://adekanmisamuel4:o6sFdmMlFI6Znl1O@cluster0.e3hupq8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-
-
 INTRODUCTION TO NODE.JS
 -Created in 2009 by Ryan Dahl
 -created to fix limitations to traditonal web servers
 - Problems such as memory issues, time it takes to fetch data i.e
 (read and write operations) e.t.c
 - Reason why Asynchronous operation was developed
+
+wIW5yFamLdpvwAuG
+mongodb+srv://adekanmisamuel4:wIW5yFamLdpvwAuG@cluster0.pyry4wp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 
 KEY REASONS TO USE NODE.JS
 - JavaScript Everywhere: You don't have to change to new language

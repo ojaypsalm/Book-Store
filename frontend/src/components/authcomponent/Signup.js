@@ -3,9 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -23,7 +21,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Book Store
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -36,12 +34,13 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 const Signup=()=> {
-const [email, setEmail]= useState('')
-const[password, setPassword]= useState('')
 const[firstName, setFirstName]= useState('')
 const[lastName, setLastName]= useState('')
+const [email, setEmail]= useState('')
+const[password, setPassword]= useState('')
 const [loading, setLoading] = useState(false)
-const navigate = useNavigate()
+const navigate = useNavigate();
+const author11 = process.env.REACT_APP_AUTH_URL;
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -61,7 +60,7 @@ const navigate = useNavigate()
 
 
     
-    axios.post(`http://localhost:3001/register`, data)
+    axios.post(`${ author11 }/register`, data)
     .then(()=>{
       setLoading(false)
       toast.success('User signed up Successfully ')
@@ -151,10 +150,6 @@ const navigate = useNavigate()
                 <Link to='/' variant='body2'>
                   Have an account? Sign In
                 </Link>
-                {/* <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                /> */}
               </Grid>
             </Grid>
             <Button
@@ -162,15 +157,12 @@ const navigate = useNavigate()
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleSubmit}
+              onClick={ handleSubmit }
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                {/* <Link href="/" variant="body2">
-                  Already have an account? Sign in
-                </Link> */}
               </Grid>
             </Grid>
           </Box>

@@ -2,19 +2,27 @@ import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import BackButton from './elements/BackButton.jsx'
-import Spinner from './elements/spinner.jsx'
+import Spinner from './elements/Spinner.jsx'
+
 
 
 const ShowBooks = () => {
 
-  const [book, setBook] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [book, setBook] = useState('');
+  const [loading, setLoading] = useState(false);
   const {id} = useParams();
+  const showBook = process.env.REACT_APP_API_URL;
+  const token = localStorage.getItem('token')
 
   useEffect(()=>{
-    setLoading(true)
-     axios.get(`http://localhost:3001/api/books/${ id }`)
+    const headers = {
+      Authorization: `Bearer ${token}`
+    }
+
+    setLoading(true);
+     axios.get(`${showBook}/${id}`,{ headers })
      .then((response)=>{
+      console.log(response.data);
       setBook(response.data)
       setLoading(false)
 
@@ -23,12 +31,13 @@ const ShowBooks = () => {
       console.log(error)
       setLoading(false)
      })
-  }, [id])
+  }, [id, showBook])
 
   return (
     <div className='p-4'>
       <BackButton />
       <h1 className='text-3xl my-4'>Show Book</h1>
+      
       {
         loading ? (
           <Spinner />
@@ -55,6 +64,16 @@ const ShowBooks = () => {
             </div>
 
             <div className='my-4'>
+              <span className='text-xl mr-4 text-gray-500'>createdBy</span>
+              <span >{book.createdBy}</span>
+            </div>
+            
+
+            <div className='my-4'>
+              <span className='text-xl mr-4 text-gray-500'>Image Url </span>
+              <span >{book.imageUrl}</span>
+            </div>
+            <div className='my-4'>
               <span className='text-xl mr-4 text-gray-500'>Date created</span>
               <span >{new Date().toString(book.createdAt)}</span>
             </div>
@@ -76,6 +95,10 @@ const ShowBooks = () => {
 
     </div>
   )
+
+
+
+
 }
 
 export default ShowBooks

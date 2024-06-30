@@ -1,5 +1,7 @@
 const express =  require('express')
+const {verifyJWT} = require('./../controller/user.controller.route.js')
 const router = express.Router()
+const upload = require('../config/upload.js')
 const { 
       createBooks,
       getBooks,
@@ -9,15 +11,15 @@ const {
 } = require('../controller/book.controller.route.js')
 
 
-router.post('/', createBooks)
+router.post('/', verifyJWT, upload.single('image'), createBooks)
 
-router.get('/', getBooks)
+router.get('/', verifyJWT, getBooks)
 
-router.get('/:id', getBook)
+router.get('/:id', verifyJWT, getBook)
 
-router.put('/:id', updateBook)
+router.put('/:id', verifyJWT, updateBook)
 
-router.delete('/:id', deleteBook)
+router.delete('/:id', verifyJWT, deleteBook)
 
 module.exports = router;
 

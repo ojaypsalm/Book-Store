@@ -13,6 +13,14 @@ const bookSchema = mongoose.Schema({
         type: Number,
         require
     },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        require: true
+    },
+    imageUrl: {
+        type: String,
+        required: false //set to false if the image is optional
+    }
 
 },
 {

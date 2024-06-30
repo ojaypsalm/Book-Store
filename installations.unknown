@@ -7,7 +7,9 @@ npm i cors
 npm install --save react-toastify
 npm install bcrypt
 npm install jsonwebtoken
-
+npm install dotenv
+npm install multer
+npm install cloudinary
 
 INTRODUCTION TO NODE.JS
 -Created in 2009 by Ryan Dahl

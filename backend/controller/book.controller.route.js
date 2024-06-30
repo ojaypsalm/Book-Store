@@ -1,4 +1,5 @@
 const Book = require('../models/books')
+const cloudinary = require('../utils/Cloudinary')
 
 const createBooks = async(req, res)=>{
 
@@ -8,17 +9,29 @@ const createBooks = async(req, res)=>{
           if (
                 !req.body.title ||
                 !req.body.author ||
-                !req.body.publishedYear
+                !req.body.publishedYear ||
+                !req.file.path
           ){
+            
 
                 return res.status(400).send({
-                      message: "Send all required fields: title, author,publishedYear"
+                      message: "Send all required fields: title, author,publishedYear, image"
                 })
           }
-
-          const book = await Book.create(req.body)
-          res.status(200).json(book)
+          const userId = req.user?.id;
           
+
+      if(!req.file){
+        return res.status(400).send({message: 'Image is required!'})
+}
+
+          console.log(userId, 'userID created Book')
+          const imageUrl = await cloudinary.uploader.upload(req.file.path);
+          const bookData = {...req.body, createdBy: userId, imageUrl: imageUrl.url };
+          const book = await Book.create(bookData)
+          res.status(200).json(book)
+
+                    
     } catch (error) {
           console.log(error)
           res.status(500).json({message: error.message})
@@ -29,11 +42,21 @@ const createBooks = async(req, res)=>{
 
 const getBooks = async(req, res)=>{
     try {
-          const books = await Book.find({})
-          res.status(200).json({
-                count: books.length,
-                data: books
-          });
+      const userId = req.user?.id;
+      let query= {}
+      if(!userId){
+            return res.status(401).json({message: 'unauthorized! please, log in'})
+      }
+      if(userId){
+            query ={createdBy: userId}
+      }
+      const books = await Book.find(query)
+      res.status(200).json({
+            message: 'Good fetch!',
+            data: books
+      })
+
+
 
     } catch (error) {
           
@@ -48,6 +71,9 @@ const getBook = async(req, res)=>{
 
           const {id} = req.params;
           const book = await Book.findById(id);
+          if(!book) {
+            return res.status(404).json({message: 'Book not found'})
+          }
           res.status(200).json(book)
     
           } catch (error) {

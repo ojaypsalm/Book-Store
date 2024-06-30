@@ -15,21 +15,29 @@ const EditBooks = () => {
   const [editedBook, setEditedBook] =  useState([])
   const { id } = useParams();
   const navigate = useNavigate()
+  const authBook= process.env.REACT_APP_API_URL;
+  const token = localStorage.getItem('token')
 
   useEffect(()=>{
+
+    if(!token){
+      toast.error('Authorization required, please log in')
+    }
+
+    const headers = {
+      Authorization: `Bearer ${token}`
+    }
+
     setLoading(true)
-    axios.get(`http://localhost:3001/api/books/${id}`)
+    axios.get(`${authBook}/${id}`, {headers})
     .then((res)=>{
-      // setTitle(res.data.title)
-      // setAuthor(res.data.author)
-      // setPublishedYear(res.data.publishedYear)
       setEditedBook(res.data)
       setLoading(false)
     })
     .catch((error)=>{
       toast.error('Error: ', error)
     })
-  }, [id] )
+  }, [] )
 
 
 
@@ -45,14 +53,23 @@ const EditBooks = () => {
       publishedYear: publishedYear
     }
 
+    if(!token){
+      toast.error('Authorization required, please log in')
+    }
+
+    const headers = {
+      Authorization: `Bearer ${token}`
+    }
+
+
     setLoading(true)
 
-    axios.put(`http://localhost:3001/api/books/${id}`, data)
+    axios.put(`${authBook}/${id}`, data, {headers})
     .then(()=>{
       setLoading(false)
       toast.success('Book Edited Successfully ')
       setTimeout(()=>{
-        navigate('/')
+        navigate('/home')
       }, 3000)
       
     })

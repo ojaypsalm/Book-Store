@@ -5,7 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -24,7 +24,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Book Store
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -39,8 +39,8 @@ const defaultTheme = createTheme();
 const Login=()=> {
 const [email, setEmail]= useState('')
 const[password, setPassword]= useState('')
-const [loading, setLoading] = useState(false)
 const navigate = useNavigate()
+const author1 = process.env.REACT_APP_AUTH_URL
 
 
   const handleSubmit = (event) => {
@@ -48,23 +48,29 @@ const navigate = useNavigate()
 
     
 
-    const rfrsh = new FormData(event.currentTarget);
+    //const rfrsh = new FormData(event.currentTarget);
 
-    const data = {
-      email: rfrsh.email,
-      password: rfrsh.password
-    }
+    // const data = {
+    //   email: rfrsh.email,
+    //   password: rfrsh.password
+    // }
     
 
-    if(!email || !password){
+    if(!email ||
+       !password
+      ){
       toast.error('fill up all details')
-      return
-
+      return;
     }
 
-    axios.post(`http://localhost:3001/books/login`, data)
-    .then(()=>{
-      setLoading(false)
+    const data = {
+      email:email,
+      password: password
+    };
+
+    axios.post(`${ author1 }/login`, data)
+    .then((response)=>{
+      localStorage.setItem('token', response.data.token);
       toast.success('User logged in Successfully ')
       setTimeout(()=>{
         navigate('/home')
@@ -72,8 +78,8 @@ const navigate = useNavigate()
       
     })
     .catch((error)=>{
-      console.log(error)
-      toast.error('Error: ', error)
+      console.log('Error:', error.message)
+      toast.error('Error: '+ error.meaasge )
     })
 
   };

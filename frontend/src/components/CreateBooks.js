@@ -10,35 +10,48 @@ const CreateBooks = () => {
   const [title, setTitle] =  useState('')
   const [author, setAuthor] = useState('')
   const [publishedYear, setPublishedYear] = useState('')
+  const [image, setImage] = useState(null)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+  const authBook= process.env.REACT_APP_API_URL
+  const token = localStorage.getItem('token')
 
   const handleSaveBook = ()=>{
-    if(!title || !author || !publishedYear){
+    if(!title || !author || !publishedYear || !image){
       toast.error('fill up all details')
-      return
+      return;
 
     }
-
-    const data = {
-      title: title,
-      author: author,
-      publishedYear: publishedYear
+    if(!token){
+      toast.error('Authorization required, please log in')
     }
 
+    const headers = {
+      Authorization: `Bearer ${token}`
+    }
+
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('author', author);
+    formData.append('publishedYear', publishedYear);
+    formData.append('image', image);
+    
+    console.log(image, 'image')
     setLoading(true)
-    axios.post(`http://localhost:3001/api/books`, data)
+
+    axios.post(`${authBook}`, formData, { headers })
+    
     .then(()=>{
       setLoading(false)
       toast.success('Book Added Successfully ')
       setTimeout(()=>{
-        navigate('/')
+        navigate('/home')
       }, 3000)
       
     })
     .catch((error)=>{
-      console.log(error)
-      toast.error('Error: ', error)
+      console.error('Error:', error.response);
+      toast.error('Error: ' + error.response);
     })
 
   }
@@ -81,6 +94,17 @@ const CreateBooks = () => {
               value={publishedYear}
               required
               onChange={(e)=>setPublishedYear(e.target.value)}
+              className='border-2 border-gray-500 px-4 py-2 w-full rounded-full'
+            />
+            
+          </div>
+          <div className='my-4'>
+            <label className='text-xl mr-4 text-gray-500'>Upload Book Image</label>
+            <input
+              type='file'
+              accept='image/'
+              required
+              onChange={(e)=>setImage(e.target.files[0])}
               className='border-2 border-gray-500 px-4 py-2 w-full rounded-full'
             />
             

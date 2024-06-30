@@ -7,39 +7,16 @@ const userRouter = require('./routes/user.route.js')
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use(cors())
+require('dotenv').config();
+const UserMod = require('./models/UserModel.js')
 
 
 app.get('/', (req, res)=>{
-    res.send("Welcome to my backend")
+  res.send("Welcome to my backend")
 })
 
-app.use('/api/books', bookRouter)
-app.use('/auth/books/', userRouter)
-
-// app.post('/login', async (req, res)=>{
-//   try {
-//     const {email, password} = req.body
-//     UserMod.findOne({email: email})
-//         .then(user=>{
-//             if(user){
-//                 if(user.password === password){
-//                     res.json('successful')
-//                 }else{
-//                     res.json('password incorrect')
-//                 }
-//             }else{
-//                 res.json('no record found')
-
-//             }
-//         })
-    
-//   }   catch (error) {
-//     res.status(500).json({message: error.message})
-    
-//   }
-// })
-
-
+app.use(process.env.APP_BOOK_ROUTE, bookRouter)
+app.use(process.env.APP_USER_ROUTE, userRouter)
 
 
 app.listen(3001, (req, res)=>{
@@ -48,7 +25,7 @@ app.listen(3001, (req, res)=>{
 
 
 
-mongoose.connect(`mongodb+srv://adekanmisamuel4:4Lsd2i4SrSYyGkfB@cluster0.pyry4wp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`)
+mongoose.connect(process.env.MONGODB_URL)
   .then(() =>{
     console.log('Connected!!!')
   })

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import BackButton from './elements/BackButton'
-import Spinner from './elements/spinner'
+import Spinner from './elements/Spinner'
 import axios from 'axios'
 import {useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
@@ -15,15 +15,26 @@ const DeleteBooks = () => {
   const [loading, setLoading] = useState(false)
   const { id } = useParams();
   const navigate = useNavigate()
+  const authBook= process.env.REACT_APP_API_URL;
+  const token = localStorage.getItem('token')
 
   const handleDelete = ()=>{
+
+    if(!token){
+      toast.error('Authorization required, please log in')
+    }
+
+    const headers = {
+      Authorization: `Bearer ${token}`
+    }
+    
     setLoading(true)
-    axios.delete(`http://localhost:3001/api/books/${id}`)
+    axios.delete(`${authBook}/${id}`, {headers})
     .then(()=>{
       setLoading(false)
       toast.success("Deleted Successfully")
       setTimeout(()=>{
-        navigate('/')
+        navigate('/home')
       }, 2000)
     })
     .catch((error)=>{
@@ -32,6 +43,7 @@ const DeleteBooks = () => {
 
     })
   }
+  
 
 
 
